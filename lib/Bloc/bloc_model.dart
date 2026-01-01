@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:boycott_subscription/Downloads/song_pipeline_service.dart';
-import 'package:boycott_subscription/Lyrics/lix.dart';
-import 'package:boycott_subscription/Lyrics/lyric_model.dart';
+import 'package:boycott_subscription/Lyrics/id&lrc_convertor.dart';
+import 'package:boycott_subscription/Lyrics/lyric_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';

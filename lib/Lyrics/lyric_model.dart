@@ -1,8 +1,6 @@
-import 'dart:convert';
 
-import 'package:boycott_subscription/Lyrics/lix.dart';
+import 'package:boycott_subscription/Lyrics/id&lrc_convertor.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class CenterLyricsView extends StatefulWidget {
   final List<LyricLine> lyrics;
@@ -121,88 +119,3 @@ class _CenterLyricsViewState extends State<CenterLyricsView> {
 }
 
 
-
-
-Future<List<LyricLine>?> fetchLyricLinesFromTitleArtist2(
-  String title,
-  String artist,
-) async {
-  // 1️⃣ Fetch Apple Music Track ID
-  final trackId = await fetchTrackId(title, artist);
-  print(trackId);
-  if (trackId == null) {
-    print('Apple Music track ID not found.');
-    return null;
-  }
-
-  // 2️⃣ New Paxsenix Apple Music Lyrics API
-  final url = Uri.parse(
-    'https://lyrics.paxsenix.org/apple-music/lyrics?id=$trackId',
-  );
-
-  try {
-    final response = await http.get(url);
-
-    if (response.statusCode != 200) {
-      print('Failed to fetch lyrics: ${response.statusCode}');
-      return null;
-    }
-
-    final data = jsonDecode(response.body);
-
-    // 3️⃣ Use prebuilt line-timed LRC (BEST OPTION)
-    final lrc = data['lrc'];
-    if (lrc == null || lrc.toString().trim().isEmpty) {
-      print('No LRC found in response.');
-      return null;
-    }
-    // 4️⃣ Parse LRC into List<LyricLine>
-    return parseLRC(lrc);
-  } catch (e) {
-    print('Error fetching lyrics: $e');
-    return null;
-  }
-}
-
-
-
-
-Future  fetchLyricLinesFromTitleArtist3(
-  String title,
-  String artist,
-) async {
-  // 1️⃣ Fetch Apple Music Track ID
-  final trackId = await fetchTrackId(title, artist);
-  if (trackId == null) {
-    print('Apple Music track ID not found.');
-    return null;
-  }
-
-  // 2️⃣ New Paxsenix Apple Music Lyrics API
-  final url = Uri.parse(
-    'https://lyrics.paxsenix.org/apple-music/lyrics?id=$trackId',
-  );
-
-  try {
-    final response = await http.get(url);
-
-    if (response.statusCode != 200) {
-      print('Failed to fetch lyrics: ${response.statusCode}');
-      return null;
-    }
-
-    final data = jsonDecode(response.body);
-
-    // 3️⃣ Use prebuilt line-timed LRC (BEST OPTION)
-    final lrc = data['lrc'];
-    if (lrc == null || lrc.toString().trim().isEmpty) {
-      print('No LRC found in response.');
-      return null;
-    }
-    // 4️⃣ Parse LRC into List<LyricLine>
-    return lrc;
-  } catch (e) {
-    print('Error fetching lyrics: $e');
-    return null;
-  }
-}

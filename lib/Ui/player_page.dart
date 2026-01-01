@@ -1,10 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:async';
 import 'package:boycott_subscription/Bloc/bloc_model.dart';
-import 'package:boycott_subscription/Lyrics/lix.dart';
+import 'package:boycott_subscription/Lyrics/id&lrc_convertor.dart';
 import 'package:boycott_subscription/Lyrics/lyric_model.dart';
 import 'package:boycott_subscription/Models/song_model.dart';
 import 'package:boycott_subscription/Song_Data/playingSong.dart';
+import 'package:boycott_subscription/Ui/lyric_page.dart';
 import 'package:boycott_subscription/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -156,10 +157,21 @@ class _PlayerPageState extends State<PlayerPage> {
                                     builder: (context, lyrx) {
                                       return BlocBuilder<Position, Duration>(
                                         builder: (context, position) {
-                                          return CenterLyricsView(
-                                            color: Color(activeColor),
-                                            lyrics: lyrx,
-                                            position: position,
+                                          return GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      LyricPage(color: Color(activeColor), player: widget.player,),
+                                                ),
+                                              );
+                                            },
+                                            child: CenterLyricsView(
+                                              color: Color(activeColor),
+                                              lyrics: lyrx,
+                                              position: position,
+                                            ),
                                           );
                                         },
                                       );
